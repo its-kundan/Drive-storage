@@ -11,9 +11,16 @@ export const createSessionClient = async () => {
 
   const session = (await cookies()).get("appwrite-session");
 
-  if (!session || !session.value) throw new Error("No session");
+  if (!session || !session.value) {
+    throw new Error("No session - User not authenticated");
+  }
 
-  client.setSession(session.value);
+  try {
+    client.setSession(session.value);
+  } catch (error) {
+    console.error("Error setting session:", error);
+    throw new Error("Invalid session - Please sign in again");
+  }
 
   return {
     get account() {

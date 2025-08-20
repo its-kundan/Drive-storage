@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-setup": "node scripts/check-setup.js",
+    "fix-permissions": "node scripts/fix-permissions.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

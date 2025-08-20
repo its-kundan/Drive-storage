@@ -1,3 +1,10 @@
+import { validateEnvVars } from '../env-check';
+
+// Validate environment variables on import
+if (typeof window === 'undefined') { // Only run on server
+  validateEnvVars();
+}
+
 export const appwriteConfig = {
   endpointUrl: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!,
   projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT!,

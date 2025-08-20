@@ -96,12 +96,17 @@ export const getFiles = async ({
   sort = "$createdAt-desc",
   limit,
 }: GetFilesProps) => {
-  const { databases } = await createAdminClient();
-
   try {
+    const { databases } = await createAdminClient();
     const currentUser = await getCurrentUser();
 
-    if (!currentUser) throw new Error("User not found");
+    if (!currentUser) {
+      // Return empty result instead of throwing error
+      return parseStringify({
+        total: 0,
+        documents: [],
+      });
+    }
 
     const queries = createQueries(currentUser, types, searchText, sort, limit);
 
@@ -114,7 +119,12 @@ export const getFiles = async ({
     console.log({ files });
     return parseStringify(files);
   } catch (error) {
-    handleError(error, "Failed to get files");
+    console.error("Error in getFiles:", error);
+    // Return empty result on error instead of throwing
+    return parseStringify({
+      total: 0,
+      documents: [],
+    });
   }
 };
 
@@ -196,17 +206,10 @@ export const deleteFile = async ({
 // ============================== TOTAL FILE SPACE USED
 export async function getTotalSpaceUsed() {
   try {
-    const { databases } = await createSessionClient();
     const currentUser = await getCurrentUser();
-    if (!currentUser) throw new Error("User is not authenticated.");
-
-    const files = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.filesCollectionId,
-      [Query.equal("owner", [currentUser.$id])],
-    );
-
-    const totalSpace = {
+    
+    // Return default empty space if no user
+    const defaultSpace = {
       image: { size: 0, latestDate: "" },
       document: { size: 0, latestDate: "" },
       video: { size: 0, latestDate: "" },
@@ -215,6 +218,19 @@ export async function getTotalSpaceUsed() {
       used: 0,
       all: 2 * 1024 * 1024 * 1024 /* 2GB available bucket storage */,
     };
+
+    if (!currentUser) {
+      return parseStringify(defaultSpace);
+    }
+
+    const { databases } = await createSessionClient();
+    const files = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      [Query.equal("owner", [currentUser.$id])],
+    );
+
+    const totalSpace = { ...defaultSpace };
 
     files.documents.forEach((file) => {
       const fileType = file.type as FileType;
@@ -231,6 +247,19 @@ export async function getTotalSpaceUsed() {
 
     return parseStringify(totalSpace);
   } catch (error) {
-    handleError(error, "Error calculating total space used:, ");
+    console.error("Error calculating total space used:", error);
+    
+    // Return default space on error
+    const defaultSpace = {
+      image: { size: 0, latestDate: "" },
+      document: { size: 0, latestDate: "" },
+      video: { size: 0, latestDate: "" },
+      audio: { size: 0, latestDate: "" },
+      other: { size: 0, latestDate: "" },
+      used: 0,
+      all: 2 * 1024 * 1024 * 1024,
+    };
+    
+    return parseStringify(defaultSpace);
   }
 }

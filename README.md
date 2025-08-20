@@ -15,9 +15,9 @@ A powerful Google Drive clone that allows users to upload, manage, and share fil
 
 - **Frontend & Backend**: Next.js
 - **Styling**: Tailwind CSS
-- **Database**: MongoDB
-- **Authentication**: JWT (JSON Web Tokens)
-- **File Storage**: AWS S3 (or any other cloud storage solution)
+- **Database**: Appwrite Database
+- **Authentication**: Appwrite Auth
+- **File Storage**: Appwrite Storage
 
 ## 📦 Installation and Setup
 
@@ -37,12 +37,14 @@ Follow these steps to set up the project locally:
 3. **Set up environment variables**:  
    Create a `.env.local` file in the root directory and include the following variables:
    ```env
-   NEXT_PUBLIC_API_URL=http://localhost:3000/api
-   MONGO_URI=your_mongo_db_connection_string
-   JWT_SECRET=your_jwt_secret
-   AWS_ACCESS_KEY_ID=your_aws_access_key
-   AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-   AWS_BUCKET_NAME=your_bucket_name
+   # Appwrite Configuration
+   NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+   NEXT_PUBLIC_APPWRITE_PROJECT=your_project_id
+   NEXT_PUBLIC_APPWRITE_DATABASE=your_database_id
+   NEXT_PUBLIC_APPWRITE_USERS_COLLECTION=your_users_collection_id
+   NEXT_PUBLIC_APPWRITE_FILES_COLLECTION=your_files_collection_id
+   NEXT_PUBLIC_APPWRITE_BUCKET=your_bucket_id
+   NEXT_APPWRITE_KEY=your_secret_key
    ```
 
 4. **Run the development server**:
@@ -76,9 +78,9 @@ Drive-storage/
 
 ## 🛡️ Security
 
-- Password hashing with bcrypt.
+- Secure authentication with Appwrite Auth.
 - Authenticated API routes to ensure data protection.
-- File uploads handled securely with AWS S3.
+- File uploads handled securely with Appwrite Storage.
 
 ## 🤝 Contributions
 
