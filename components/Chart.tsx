@@ -76,7 +76,7 @@ export const Chart = ({ used = 0 }: { used: number }) => {
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="fill-white/70"
+                          className="fill-white/80 text-sm"
                         >
                           Space used
                         </tspan>
@@ -90,10 +90,14 @@ export const Chart = ({ used = 0 }: { used: number }) => {
         </ChartContainer>
       </CardContent>
       <CardHeader className="chart-details">
-        <CardTitle className="chart-title">Available Storage</CardTitle>
+        <CardTitle className="chart-title">Storage Overview</CardTitle>
         <CardDescription className="chart-description">
-          {used ? convertFileSize(used) : "2GB"} / 2GB
+          {used ? convertFileSize(used) : "0B"} of 2GB used
         </CardDescription>
+        <div className="mt-4 flex items-center gap-2">
+          <div className="w-3 h-3 bg-white/20 rounded-full"></div>
+          <span className="text-sm text-white/80">Available: {used ? convertFileSize(2 * 1024 * 1024 * 1024 - used) : "2GB"}</span>
+        </div>
       </CardHeader>
     </Card>
   );

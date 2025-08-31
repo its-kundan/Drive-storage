@@ -5,7 +5,6 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { cn, convertFileToUrl, getFileType } from "@/lib/utils";
-import Image from "next/image";
 import Thumbnail from "@/components/Thumbnail";
 import { MAX_FILE_SIZE } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
@@ -63,7 +62,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleRemoveFile = (
-    e: React.MouseEvent<HTMLImageElement, MouseEvent>,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     fileName: string,
   ) => {
     e.stopPropagation();
@@ -74,17 +73,14 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
     <div {...getRootProps()} className="cursor-pointer">
       <input {...getInputProps()} />
       <Button type="button" className={cn("uploader-button", className)}>
-        <Image
-          src="/assets/icons/upload.svg"
-          alt="upload"
-          width={24}
-          height={24}
-        />{" "}
-        <p>Upload</p>
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+        </svg>
+        <p>Upload Files</p>
       </Button>
       {files.length > 0 && (
         <ul className="uploader-preview-list">
-          <h4 className="h4 text-light-100">Uploading</h4>
+          <h4 className="h4 text-neutral-800 mb-4">Uploading Files</h4>
 
           {files.map((file, index) => {
             const { type, extension } = getFileType(file.name);
@@ -103,22 +99,21 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
                   <div className="preview-item-name">
                     {file.name}
-                    <Image
-                      src="/assets/icons/file-loader.gif"
-                      width={80}
-                      height={26}
-                      alt="Loader"
-                    />
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="w-4 h-4 border-2 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
+                      <span className="text-xs text-neutral-500">Uploading...</span>
+                    </div>
                   </div>
                 </div>
 
-                <Image
-                  src="/assets/icons/remove.svg"
-                  width={24}
-                  height={24}
-                  alt="Remove"
+                <button
                   onClick={(e) => handleRemoveFile(e, file.name)}
-                />
+                  className="p-1 hover:bg-neutral-200 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5 text-neutral-500 hover:text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </li>
             );
           })}

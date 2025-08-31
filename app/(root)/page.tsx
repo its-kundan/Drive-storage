@@ -49,7 +49,7 @@ const Dashboard = async () => {
                   </div>
 
                   <h5 className="summary-type-title">{summary.title}</h5>
-                  <Separator className="bg-light-400" />
+                  <Separator className="bg-neutral-200" />
                   <FormattedDateTime
                     date={summary.latestDate}
                     className="text-center"
@@ -62,7 +62,7 @@ const Dashboard = async () => {
 
         {/* Recent files uploaded */}
         <section className="dashboard-recent-files">
-          <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
+          <h2 className="h3 xl:h2 text-neutral-800">Recent files uploaded</h2>
           {files.documents.length > 0 ? (
             <ul className="mt-5 flex flex-col gap-5">
               {files.documents.map((file: Models.Document) => (
@@ -102,9 +102,9 @@ const Dashboard = async () => {
     return (
       <div className="dashboard-container">
         <div className="flex h-64 flex-col items-center justify-center">
-          <h2 className="h3 mb-4 text-light-100">Welcome to StoreIt</h2>
-          <p className="body-1 text-center text-light-200">
-            Please complete your setup or try refreshing the page.
+          <h2 className="h3 mb-4 text-neutral-800">Welcome to Cloud Storage</h2>
+          <p className="body-1 text-center text-neutral-500">
+            Your premium cloud storage solution. Please complete your setup or try refreshing the page.
           </p>
         </div>
       </div>

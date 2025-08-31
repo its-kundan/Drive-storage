@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getFiles } from "@/lib/actions/file.actions";
@@ -10,6 +9,7 @@ import { Models } from "node-appwrite";
 import Thumbnail from "@/components/Thumbnail";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import { useDebounce } from "use-debounce";
+
 const Search = () => {
   const [query, setQuery] = useState("");
   const searchParams = useSearchParams();
@@ -54,15 +54,12 @@ const Search = () => {
   return (
     <div className="search">
       <div className="search-input-wrapper">
-        <Image
-          src="/assets/icons/search.svg"
-          alt="Search"
-          width={24}
-          height={24}
-        />
+        <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
         <Input
           value={query}
-          placeholder="Search..."
+          placeholder="Search your files..."
           className="search-input"
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -72,7 +69,7 @@ const Search = () => {
             {results.length > 0 ? (
               results.map((file) => (
                 <li
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between p-3 hover:bg-neutral-50 rounded-xl transition-colors cursor-pointer"
                   key={file.$id}
                   onClick={() => handleClickItem(file)}
                 >
@@ -83,14 +80,14 @@ const Search = () => {
                       url={file.url}
                       className="size-9 min-w-9"
                     />
-                    <p className="subtitle-2 line-clamp-1 text-light-100">
+                    <p className="subtitle-2 line-clamp-1 text-neutral-800">
                       {file.name}
                     </p>
                   </div>
 
                   <FormattedDateTime
                     date={file.$createdAt}
-                    className="caption line-clamp-1 text-light-200"
+                    className="caption line-clamp-1 text-neutral-500"
                   />
                 </li>
               ))
