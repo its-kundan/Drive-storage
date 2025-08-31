@@ -1,68 +1,15 @@
-# Quick Setup Guide - Fix the "Attribute not found" Error
+# 🚀 Quick Setup Guide - Fix All Issues
 
-## The Problem
-You're getting this error: `"Invalid query: Attribute not found in schema: email"`
+## 🎯 **Current Issues**
+1. **Files collection missing ALL required attributes** (9 attributes)
+2. **Permissions not set correctly**
+3. **Authentication not working**
 
-This means your Appwrite database collection doesn't have the required attributes.
+## 🔧 **Step 1: Add Files Collection Attributes**
 
-## Quick Fix (5 minutes)
+**Go to your Appwrite Console → Database → Cloud Storage → files collection → Attributes tab**
 
-### Step 1: Run the Setup Check
-```bash
-npm run check-setup
-```
-
-This will tell you exactly what's missing.
-
-### Step 2: Go to Appwrite Console
-1. Visit [cloud.appwrite.io](https://cloud.appwrite.io/)
-2. Log in and open your project
-
-### Step 3: Create Users Collection (if missing)
-1. Go to **Database** → Your database
-2. Click **"Create Collection"**
-3. Name: `users`
-4. Copy the Collection ID to your `.env.local`
-
-### Step 4: Add Required Attributes to Users Collection
-In your `users` collection, add these attributes:
-
-| Attribute | Type | Size | Required |
-|-----------|------|------|----------|
-| `fullName` | String | 255 | ✅ Yes |
-| `email` | String | 320 | ✅ Yes |
-| `avatar` | URL | 2000 | ✅ Yes |
-| `accountId` | String | 255 | ✅ Yes |
-
-**How to add attributes:**
-1. Click on your `users` collection
-2. Go to **"Attributes"** tab
-3. Click **"Create Attribute"**
-4. Add each attribute with the settings above
-
-### Step 5: Create Indexes
-1. Go to **"Indexes"** tab in your users collection
-2. Click **"Create Index"**
-3. Add these indexes:
-   - **Key**: `email`, **Type**: Unique, **Attributes**: `email`
-   - **Key**: `accountId`, **Type**: Unique, **Attributes**: `accountId`
-
-### Step 6: Set Permissions
-1. Go to **"Settings"** tab in your users collection
-2. Set all permissions to `users`:
-   - Read: `users`
-   - Create: `users`
-   - Update: `users`
-   - Delete: `users`
-
-### Step 7: Create Files Collection (if missing)
-1. Go back to your database
-2. Click **"Create Collection"**
-3. Name: `files`
-4. Copy the Collection ID to your `.env.local`
-
-### Step 8: Add Files Collection Attributes
-Add these attributes to your `files` collection:
+Add these 9 attributes one by one:
 
 | Attribute | Type | Size | Required | Array |
 |-----------|------|------|----------|-------|
@@ -76,53 +23,69 @@ Add these attributes to your `files` collection:
 | `users` | String | 255 | ❌ No | ✅ Yes |
 | `bucketFileId` | String | 255 | ✅ Yes | No |
 
-### Step 9: Create Storage Bucket (if missing)
-1. Go to **Storage** in your Appwrite console
-2. Click **"Create Bucket"**
-3. Name: `files`
-4. Set permissions to `users`
-5. Copy the Bucket ID to your `.env.local`
+**Important:**
+- For `users` attribute, check **"Array"**
+- For `size` attribute, use **Integer** type
+- For `url` attribute, use **URL** type
 
-### Step 10: Test Again
-```bash
-npm run check-setup
-```
+## 🔧 **Step 2: Set Collection Permissions**
 
-## Common Issues & Solutions
+### Users Collection Permissions
+1. Go to **Database → Cloud Storage → users collection → Settings tab**
+2. Set all permissions to: `users`
 
-### ❌ "Collection not found"
-- Make sure you created the collection
-- Check that the Collection ID in `.env.local` is correct
+### Files Collection Permissions  
+1. Go to **Database → Cloud Storage → files collection → Settings tab**
+2. Set all permissions to: `users`
 
-### ❌ "Database not found"
-- Make sure you created the database
-- Check that the Database ID in `.env.local` is correct
+### Storage Bucket Permissions
+1. Go to **Storage → Cloud Storage1 bucket → Settings tab**
+2. Set all permissions to: `users`
 
-### ❌ "Attribute not found"
-- Make sure you added all required attributes
-- Check that attribute names match exactly (case-sensitive)
+## 🔧 **Step 3: Check API Key Permissions**
 
-### ❌ "Permission denied"
-- Set all permissions to `users` on collections and bucket
+1. Go to **Settings → API Keys**
+2. Click on your API key
+3. Make sure it has these scopes:
+   - ✅ `databases.read`
+   - ✅ `databases.write`
+   - ✅ `users.read`
+   - ✅ `users.write`
+   - ✅ `storage.read`
+   - ✅ `storage.write`
+   - ✅ `sessions.write`
 
-## Your .env.local should look like this:
-```env
-NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-NEXT_PUBLIC_APPWRITE_PROJECT=your_project_id
-NEXT_PUBLIC_APPWRITE_DATABASE=your_database_id
-NEXT_PUBLIC_APPWRITE_USERS_COLLECTION=your_users_collection_id
-NEXT_PUBLIC_APPWRITE_FILES_COLLECTION=your_files_collection_id
-NEXT_PUBLIC_APPWRITE_BUCKET=your_bucket_id
-NEXT_APPWRITE_KEY=your_secret_key
-```
+## 🔧 **Step 4: Enable Authentication**
 
-## After Setup
-1. Run `npm run dev`
-2. Try signing up with a new account
-3. The error should be gone!
+1. Go to **Auth → Settings**
+2. Enable **"Email/Password"** authentication method
+3. Make sure **"Email verification"** is enabled
 
-## Still having issues?
-Run the setup check and share the output:
-```bash
-npm run check-setup
-```
+## ✅ **After Setup**
+
+1. **Run the setup check:**
+   ```bash
+   npm run check-setup
+   ```
+
+2. **You should see all attributes as ✅**
+
+3. **Try signing up again:**
+   - Go to `http://localhost:3000/sign-up`
+   - Create a new account
+
+## 🚨 **If Still Having Issues**
+
+1. **Clear browser cookies** and try again
+2. **Restart the development server:**
+   ```bash
+   npm run dev
+   ```
+3. **Check the console for any remaining errors**
+
+## 📞 **Need Help?**
+
+If you're still having issues after following these steps, please:
+1. Run `npm run check-setup` and share the output
+2. Share any error messages from the browser console
+3. Let me know which step you're stuck on

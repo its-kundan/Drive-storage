@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { cn, getFileIcon } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface Props {
   type: string;
